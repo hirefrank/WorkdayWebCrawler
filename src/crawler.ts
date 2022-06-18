@@ -54,7 +54,7 @@ export const getJobPostings = async ({ url, dest, threads, verbose } : CliArgume
       return new Promise<JobPostingInfo|undefined>(resolve =>
         {
           const worker = new Worker(new URL('./jobWorker.ts', import.meta.url).href, { type: 'module' })
-          worker.postMessage({ job: post, dest })
+          worker.postMessage(post)
           worker.onmessage = ({ data } : { data: JobPostingInfo|undefined }) => resolve(data)
         })
     })

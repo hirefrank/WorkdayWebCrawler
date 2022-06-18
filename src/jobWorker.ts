@@ -17,7 +17,7 @@ export interface JobPostingInfo {
 }
 
 // @ts-ignore: property does not exist
-self.onmessage = async ( { data: { job, dest } } : { data: { job: JobPosting, dest: string } } ) : void =>
+self.onmessage = async ( { data: job } : { data: JobPosting } ) : void =>
 {
   const details = await fetchJobDetails(job)
 
