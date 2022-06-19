@@ -24,15 +24,30 @@ export interface RequestInput {
   searchText: string
 }
 
-export const getJobPostings = async ({ url, dest, threads, verbose } : CliArguments) : Promise<void> =>
+
+export const getJobPostings = async ({ url, offset, verbose, limit } : CliArguments) : Promise<any> =>
+{
+
+  const input : RequestInput = {appliedFacets: {}, limit: limit, offset: offset, searchText: ''}
+      , response = await getListUrlContents(url, input)
+
+  const jobPostings: any = response?.jobPostings || {};
+  const total: number = response?.total || 0;
+  
+  return { total, jobPostings };
+
+}
+
+export const processJobPostings = async ({ jobPostings, url, dest, threads, verbose } : CliArguments) : Promise<void> =>
 {
   verbose && console.log('Scraping list of all job postings..')
 
-  const input : RequestInput = {appliedFacets: {}, limit: 20, offset: 0, searchText: ''}
+  /*
+  const input : RequestInput = {appliedFacets: {}, limit: 20, offset: offset, searchText: ''}
       , response = await getListUrlContents(url, input)
       , { jobPostings=[] } = response || {}
+  */
   
-  verbose && console.log(`There are ${jobPostings.length} job postings.`)
   verbose && console.log('Scraping full descriptions of each job posting..')
 
   if ( 0 == jobPostings.length)
